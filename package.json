@@ -10,10 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
+    "@nuxtjs/tailwindcss": "7.0.0-beta.0",
     "nuxt": "^3.10.0",
-    "vue": "^3.4.20",
-    "vue-router": "^4.3.0"
+    "vue": "^3.5.16",
+    "vue-router": "^4.5.1"
   },
   "dependencies": {
     "@prisma/nuxt": "^0.3.0"
