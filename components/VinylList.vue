@@ -41,7 +41,7 @@ onMounted(() => {
         Aucun vinyl à afficher.
       </div>
       <!-- Liste de vinyls en grille responsive -->
-      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+      <ul class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         <li v-for="vinyl in vinyls" :key="vinyl.id" class="bg-white rounded-lg shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden flex flex-col">
           <img
             :src="vinyl.coverUrl"
