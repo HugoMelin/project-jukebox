@@ -16,6 +16,8 @@
     "vue-router": "^4.5.1"
   },
   "dependencies": {
-    "@prisma/nuxt": "^0.3.0"
+    "@prisma/nuxt": "^0.3.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
