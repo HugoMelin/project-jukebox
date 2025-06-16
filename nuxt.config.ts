@@ -4,5 +4,9 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@prisma/nuxt'
-  ]
+  ],
+  css: [
+    // Ajoute le chemin vers ton fichier tailwind.css
+    '@/assets/css/tailwind.css'
+  ],
 });
