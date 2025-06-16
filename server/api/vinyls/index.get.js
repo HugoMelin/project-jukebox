@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   try {
     const vinyls = await prisma.vinyl.findMany();
-    return { count: vinyls.length, vinyls };
+
+    return {count: vinyls.length, vinyls };
   } catch (error) {
     console.error("Erreur lors de la récupération des vinyls :", error);
     return {

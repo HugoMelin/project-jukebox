@@ -2,28 +2,43 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const parseData = (data) => {
+  return {
+    title: data.title ? String(data.title) : undefined,       // Transformation en chaîne
+    artist: data.artist ? String(data.artist) : undefined,    // Transformation en chaîne
+    year: data.year ? parseInt(data.year) : undefined,        // Conversion en entier
+    owned: data.owned !== undefined ? Boolean(data.owned) : undefined, // Conversion en booléen
+    listened: data.listened !== undefined ? Boolean(data.listened) : undefined, // Conversion en booléen
+    liked: data.liked !== undefined ? Boolean(data.liked) : undefined, // Conversion en booléen
+    coverUrl: data.coverUrl ? String(data.coverUrl) : undefined, // Transformation en chaîne
+  }
+};
+
 export default defineEventHandler(async (event) => {
   try {
     const id = parseInt(getRouterParam(event, "id"));
     const body = await readBody(event);
 
-    const updateVinyl = await prisma.vinyl.update({
+    const vinylExists = await prisma.vinyl.findUnique({
       where: { id },
-      data: {
-        title: body.title,
-        artist: body.artist,
-        year: body.year,
-        owner: body.owner,
-        listened: body.listened,
-        liked: body.liked,
-        coverUrl: body.coverUrl,
-      },
+    });
+
+    if (!vinylExists) {
+      return {
+        statusCode: 404,
+        message: "Le vinyl n'existe pas.",
+      };
+    }
+
+    const updatedVinyl = await prisma.vinyl.update({
+      where: { id },
+      data: parseData(body),
     });
 
     return {
       statusCode: 203,
       message: "Vinyl mis à jour avec succès",
-      updateVinyl,
+      updatedVinyl,
     };
   } catch (error) {
     console.error("Erreur lors de la mise à jour du vinyl :", error);
