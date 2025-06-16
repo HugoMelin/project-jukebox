@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       data: {
         title: body.title,
         artist: body.artist,
-        year: body.year,
+        year: parseInt(body.year),
         coverUrl: body.coverUrl,
       },
     });
