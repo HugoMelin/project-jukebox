@@ -2,6 +2,70 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+/**
+ * @swagger
+ * /api/vinyls:
+ *   post:
+ *     summary: Ajouter un nouveau vinyl
+ *     tags:
+ *       - Vinyls
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - artist
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Nevermind
+ *               artist:
+ *                 type: string
+ *                 example: Nirvana
+ *               year:
+ *                 type: integer
+ *                 nullable: true
+ *                 example: 1991
+ *               coverUrl:
+ *                 type: string
+ *                 nullable: true
+ *                 example: https://example.com/covers/nevermind.jpg
+ *     responses:
+ *       201:
+ *         description: Vinyl ajouté avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 201
+ *                 message:
+ *                   type: string
+ *                   example: Vinyl ajouté avec succès.
+ *                 vinyl:
+ *                   $ref: '#/components/schemas/Vinyl'
+ *       500:
+ *         description: Erreur serveur lors de l'ajout du vinyl
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: Une erreur est survenue lors de l'ajout du vinyl.
+ *                 error:
+ *                   type: string
+ *                   example: Internal Server Error
+*/
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);

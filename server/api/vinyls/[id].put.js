@@ -14,6 +14,97 @@ const parseData = (data) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/vinyls/{id}:
+ *   put:
+ *     summary: Mettre à jour un vinyle existant
+ *     tags:
+ *       - Vinyls
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID du vinyle à mettre à jour
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: The Dark Side of the Moon
+ *               artist:
+ *                 type: string
+ *                 example: Pink Floyd
+ *               year:
+ *                 type: integer
+ *                 nullable: true
+ *                 example: 1973
+ *               owned:
+ *                 type: boolean
+ *                 example: true
+ *               listened:
+ *                 type: boolean
+ *                 example: true
+ *               liked:
+ *                 type: boolean
+ *                 example: false
+ *               coverUrl:
+ *                 type: string
+ *                 nullable: true
+ *                 example: https://example.com/covers/darkside.jpg
+ *     responses:
+ *       203:
+ *         description: Vinyl mis à jour avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 203
+ *                 message:
+ *                   type: string
+ *                   example: Vinyl mis à jour avec succès
+ *                 updatedVinyl:
+ *                   $ref: '#/components/schemas/Vinyl'
+ *       404:
+ *         description: Le vinyl n'existe pas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: Le vinyl n'existe pas.
+ *       500:
+ *         description: Erreur serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 statusCode:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: Une erreur est survenue lors de la mise à jour du vinyl.
+ *                 error:
+ *                   type: string
+ *                   example: Internal Server Error
+ */
 export default defineEventHandler(async (event) => {
   try {
     const id = parseInt(getRouterParam(event, "id"));

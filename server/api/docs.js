@@ -1,6 +1,4 @@
-// server/api/docs.ts
-
-import { defineEventHandler } from 'h3';
+import { defineEventHandler } from "h3";
 
 export default defineEventHandler(() => {
   return `
@@ -17,7 +15,9 @@ export default defineEventHandler(() => {
           window.onload = function () {
             SwaggerUIBundle({
               url: '/api/docs-json',
-              dom_id: '#swagger-ui'
+              dom_id: '#swagger-ui',
+              operationsSorter: 'alpha',
+              tagsSorter: 'alpha',
             });
           };
         </script>
