@@ -1,4 +1,7 @@
 <script setup>
+import { useVinylStore } from '~/stores/vinylsStore';
+
+const store = useVinylStore();
 const vinyls = ref(null)
 
 onMounted(() => {

@@ -1,12 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@prisma/nuxt'
-  ],
-  css: [
-    // Ajoute le chemin vers ton fichier tailwind.css
-    '@/assets/css/tailwind.css'
-  ],
+  modules: ["@nuxtjs/tailwindcss", "@prisma/nuxt", "@pinia/nuxt"],
+  css: ["@/assets/css/tailwind.css"],
 });
