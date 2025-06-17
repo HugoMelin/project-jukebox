@@ -11,7 +11,11 @@ export const useVinylStore = defineStore("vinyl", () => {
     error.value = null;
     try {
       const res = await $fetch("/api/vinyls");
-      vinyls.value = res.vinyls;
+      if (res && res.vinyls) {
+        vinyls.value = res.vinyls; // Assure-toi que tu assignes bien res.vinyls
+      } else {
+        throw new Error("Aucune donnée de vinyls reçue.");
+      }
     } catch (err) {
       error.value = "Impossible de récupérer les vinyls.";
       console.error(err);
@@ -20,8 +24,8 @@ export const useVinylStore = defineStore("vinyl", () => {
     }
   };
 
-  onMounted(() => {
-    fetchVinyls();
+  onMounted(async () => {
+    await fetchVinyls();
   });
 
   return {
