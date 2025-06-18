@@ -1,5 +1,3 @@
-const
-
 export async function useHandleState(data) {
   try {
     const res = await $fetch(`/api/vinyls/${data.id}`, {
