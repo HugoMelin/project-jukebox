@@ -8,6 +8,8 @@ const store = useVinylStore();
 // Les données de vinyls, l'état de chargement, et l'erreur viennent directement du store
 const { vinyls, isLoading, error } = store;
 
+watch(vinyls, (newVinyls) => { console.log(newVinyls)});
+
 store.fetchVinyls();
 </script>
 
@@ -20,9 +22,15 @@ store.fetchVinyls();
       <p class="text-xl text-gray-500">Chargement...</p>
     </div>
 
+    <div v-if="error" class="text-center text-red-600">
+      <p class="text-xl">{{ error }}</p>
+      <button @click="store.fetchVinyls" class="bg-black text-white rounded-lg shadow-lg px-4 py-2 hover:bg-gray-800">Réessayer</button>
+    </div>
+
+
     <div v-else>
       <!-- Affichage d'un message si aucun vinyl n'est disponible -->
-      <div v-if="vinyls.length === 0" class="text-center text-gray-500">
+      <div v-if="vinyls && vinyls.length === 0" class="text-center text-gray-500">
         Aucun vinyl à afficher.
       </div>
 

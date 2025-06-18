@@ -12,7 +12,7 @@ export const useVinylStore = defineStore("vinyl", () => {
     try {
       const res = await $fetch("/api/vinyls");
       if (res && res.vinyls) {
-        vinyls.value = res.vinyls; // Assure-toi que tu assignes bien res.vinyls
+        vinyls.value = res.vinyls;
       } else {
         throw new Error("Aucune donnée de vinyls reçue.");
       }
