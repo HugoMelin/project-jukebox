@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 import { ref, onMounted } from "vue";
 
 export const useVinylStore = defineStore("vinyl", () => {
-  const vinyls = ref([]);
-  const isLoading = ref(false);
+  const vinyls = ref(null);
+  const isLoading = ref(true);
   const error = ref(null);
 
   const fetchVinyls = async () => {

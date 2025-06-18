@@ -5,12 +5,12 @@ import { onMounted, toRaw } from 'vue';
 // Accède au store
 const store = useVinylStore();
 
-// Les données de vinyls, l'état de chargement, et l'erreur viennent directement du store
-const { vinyls, isLoading, error } = store;
+const { isLoading, vinyls, error } = storeToRefs(store);
+const { fetchVinyls } = store
 
-watch(vinyls, (newVinyls) => { console.log(newVinyls)});
-
-store.fetchVinyls();
+onMounted(() => {
+  fetchVinyls();
+})
 </script>
 
 <template>
@@ -24,7 +24,7 @@ store.fetchVinyls();
 
     <div v-if="error" class="text-center text-red-600">
       <p class="text-xl">{{ error }}</p>
-      <button @click="store.fetchVinyls" class="bg-black text-white rounded-lg shadow-lg px-4 py-2 hover:bg-gray-800">Réessayer</button>
+      <button @click="fetchVinyls" class="bg-black text-white rounded-lg shadow-lg px-4 py-2 hover:bg-gray-800">Réessayer</button>
     </div>
 
 
