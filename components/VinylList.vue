@@ -1,26 +1,68 @@
 <script setup>
-import { useVinylStore } from '@/stores/vinylsStore';
+import { useVinylStore } from '@/stores/vinylsStore'
+import { storeToRefs } from 'pinia'
+import { onMounted, ref, computed, toRef, defineProps } from 'vue'
 
-// Accède au store
-const store = useVinylStore();
+// Props
+const props = defineProps({
+  filter: {
+    type: String,
+    default: 'all'
+  }
+})
+const filter = toRef(props, 'filter')
 
-const { isLoading, vinyls, error } = storeToRefs(store);
+// Store
+const store = useVinylStore()
+const { isLoading, vinyls, error } = storeToRefs(store)
 const { fetchVinyls } = store
 
+// Autres filtres
+const likedFilter = ref(false)
+const listenedFilter = ref(false)
+
+// Lifecycle
 onMounted(() => {
-  fetchVinyls();
+  fetchVinyls()
 })
 
+// Computed
+const filteredVinyls = computed(() => {
+  let result = vinyls.value || []
+
+  if (filter.value !== 'all') {
+    result = result.filter(vinyl => vinyl?.[filter.value])
+  }
+  if (likedFilter.value) {
+    result = result.filter(vinyl => vinyl?.liked)
+  }
+  if (listenedFilter.value) {
+    result = result.filter(vinyl => vinyl?.listened)
+  }
+  return result
+})
+
+// Méthode de changement d'état
 const handleChangeState = async (data) => {
-  await useHandleState(data);
-  await fetchVinyls();
+  await useHandleState(data)
+  await fetchVinyls()
 }
 </script>
 
 <template>
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-extrabold text-center mb-8 text-gray-900">Ma collection de vinyls</h1>
-    
+    <div class="mb-6 flex flex-wrap gap-4 justify-center">
+      <label class="flex items-center space-x-2 text-lg">
+        <input type="checkbox" v-model="listenedFilter" />
+        <span>Écoutés</span>
+      </label>
+
+      <label class="flex items-center space-x-2 text-lg">
+        <input type="checkbox" v-model="likedFilter" />
+        <span>Aimés</span>
+      </label>
+</div>
+
     <!-- Affichage du message de chargement -->
     <div v-if="isLoading" class="text-center mt-8">
       <p class="text-xl text-gray-500">Chargement...</p>
@@ -34,13 +76,13 @@ const handleChangeState = async (data) => {
 
     <div v-else>
       <!-- Affichage d'un message si aucun vinyl n'est disponible -->
-      <div v-if="vinyls && vinyls.length === 0" class="text-center text-gray-500">
+      <div v-if="vinyls && filteredVinyls.length === 0" class="text-center text-gray-500">
         Aucun vinyl à afficher.
       </div>
 
       <!-- Affichage des vinyls en grille -->
       <ul class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        <li v-for="vinyl in vinyls" :key="vinyl.id" class="bg-white rounded-lg shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden flex flex-col">
+        <li v-for="vinyl in filteredVinyls" :key="vinyl.id" class="bg-white rounded-lg shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl overflow-hidden flex flex-col">
           <NuxtLink :to="`/vinyls/${vinyl.id}`">
             <img
               :src="vinyl.coverUrl"
