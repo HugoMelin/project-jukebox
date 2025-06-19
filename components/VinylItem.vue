@@ -18,6 +18,13 @@
     await useHandleState(data);
     await fetchVinyl();
   }
+
+  const handleDelete = async (id) => {
+    await $fetch(`/api/vinyls/${id}`, {
+      method: "DELETE"
+    })
+    navigateTo(`/vinyls/`)
+  }
 </script>
 
 <template>
@@ -67,6 +74,25 @@
                 </svg>
               </span>
             </div>
+
+            <div class="mt-6 flex justify-center space-x-6">
+              <!-- Modifier Link -->
+              <NuxtLink 
+                :to="`/vinyls/${vinyl.id}/update`"
+                class="text-indigo-600 hover:text-indigo-800 font-semibold text-lg p-2 rounded-md border-2 border-indigo-600 hover:border-indigo-800 transition-all duration-200"
+              >
+                Modifier
+              </NuxtLink>
+
+              <!-- Supprimer Link -->
+              <NuxtLink 
+                @click="handleDelete(vinyl.id)"
+                class="cursor-pointer text-red-600 hover:text-red-800 font-semibold text-lg p-2 rounded-md border-2 border-red-600 hover:border-red-800 transition-all duration-200"
+              >
+                Supprimer
+              </NuxtLink>
+            </div>
+
     </div>
   
     <div v-else class="text-center mt-8">

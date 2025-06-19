@@ -51,7 +51,7 @@ const handleChangeState = async (data) => {
           </NuxtLink>
           <div class="p-5 flex flex-col justify-between h-full">
             <h2 class="text-2xl font-semibold text-gray-800">{{ vinyl.title }}</h2>
-            <p class="text-gray-500 text-lg">{{ vinyl.artist }} - {{ vinyl.year }}</p>
+            <p class="text-gray-500 text-lg">{{ vinyl.artist }} {{ vinyl.year ? "- " + vinyl.year : "" }}</p>
             <div class="mt-4 flex space-x-6 justify-center items-center text-xl">
               <!-- Possédé -->
               <span

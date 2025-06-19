@@ -1,10 +1,29 @@
 <template>
     <main>
-        <AddVinylForm :formulaire="formulaire" buttonLabel="Envoyer" @handleSubmit="handleSubmit"/>
+        <div v-if="isLoading" class="text-center mt-8">
+            <p class="text-xl text-gray-500">Chargement...</p>
+        </div>
+        <AddVinylForm v-else :formulaire="formulaire" buttonLabel="Modifier" @handleSubmit="handleSubmit" :data="vinyl"/>
     </main>
 </template>
 
 <script setup>
+const route = useRoute();
+const id = parseInt(route.params.id);
+
+const vinyl = ref(null)
+const isLoading = ref(true)
+
+  const fetchVinyl = async () => {
+    const res = await $fetch(`/api/vinyls/${id}`)
+    vinyl.value = res;
+    isLoading.value = false;
+  }
+  
+  onMounted(async () => {
+    fetchVinyl();
+  })
+
 const formulaire = [
     {
         label: 'Titre',
@@ -38,11 +57,12 @@ const formulaire = [
 
 const handleSubmit = async (vinyl) => {
     try {
-      const res = await $fetch("/api/vinyls", {
-        method: "POST",
+      const res = await $fetch(`/api/vinyls/${id}`, {
+        method: "PUT",
         body: vinyl
       })
-      console.log('Vinyle ajouté avec succés : ', res.vinyl);
+      console.log('Vinyle modifié avec succés : ', res.updatedVinyl);
+      navigateTo(`/vinyls/${id}`)
     } catch (error) {
       console.error(error)
     }
