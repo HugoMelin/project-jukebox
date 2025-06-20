@@ -43,6 +43,8 @@ const handleSubmit = async (vinyl) => {
         body: vinyl
       })
       console.log('Vinyle ajouté avec succés : ', res.vinyl);
+
+      navigateTo(`/vinyls/${res.vinyl.id}`)
     } catch (error) {
       console.error(error)
     }

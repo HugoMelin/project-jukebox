@@ -1,88 +1,69 @@
 <template>
-    <div class="vinyl-search">
-      <input
-        v-model="search"
-        @input="onSearch"
-        type="text"
-        placeholder="Rechercher un vinyle..."
-        class="search-input"
-      />
-  
-      <div v-if="loading" class="loading">Chargement...</div>
-  
-      <div v-else>
-        <div v-if="vinyls.length === 0" class="no-results">
-          Aucun vinyle trouvé.
-        </div>
-  
-        <ul class="vinyl-list" v-else>
-          <li v-for="vinyl in vinyls" :key="vinyl.id" class="vinyl-item">
-            <strong>{{ vinyl.title }}</strong> — {{ vinyl.artist }}
-          </li>
-        </ul>
-      </div>
+  <div class="max-w-2xl mx-auto p-4">
+    <input
+      v-model="search"
+      @input="onSearch"
+      type="text"
+      placeholder="Rechercher un vinyle..."
+      class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <div v-if="search && loading" class="mt-4 text-center text-gray-500 italic">
+      Chargement...
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, watch, debounce } from '#imports'
-  
-  const search = ref('')
-  const vinyls = ref([])
-  const loading = ref(false)
-  
-  const fetchVinyls = async () => {
-    loading.value = true
-    try {
-      const queryParam = search.value ? `?query=${encodeURIComponent(search.value)}` : ''
-      const response = await $fetch(`/api/vinyls${queryParam}`)
-      vinyls.value = response.vinyls || []
-    } catch (error) {
-      console.error('Erreur lors de la recherche des vinyles :', error)
-      vinyls.value = []
-    } finally {
-      loading.value = false
-    }
+
+    <div v-else class="mt-4">
+      <div v-if="trimmedSearch && vinyls.length === 0" class="text-center text-gray-400">
+        Aucun vinyle trouvé.
+      </div>
+
+      <ul v-else class="divide-y divide-gray-200">
+        <li
+          v-for="vinyl in vinyls"
+          :key="vinyl.id"
+          class="py-3 px-2 hover:bg-gray-50 transition"
+        >
+          <NuxtLink :to="`/vinyls/${vinyl.id}`">
+            <div class="font-semibold text-gray-800">{{ vinyl.title }}</div>
+            <div class="text-sm text-gray-600">{{ vinyl.artist }}</div>
+          </NuxtLink>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import debounce from 'lodash.debounce'
+
+const search = ref('')
+const vinyls = ref([])
+const loading = ref(false)
+
+const trimmedSearch = computed(() => search.value.trim())
+
+const fetchVinyls = async () => {
+  const trimmed = search.value.trim()
+  if (!trimmed) {
+    vinyls.value = []
+    loading.value = false
+    return
   }
-  
-  // Déclenche la recherche 300ms après la frappe (anti-spam)
-  const onSearch = debounce(fetchVinyls, 300)
-  
-  // Charger tous les vinyles au démarrage
-  onMounted(fetchVinyls)
-  </script>
-  
-  <style scoped>
-  .vinyl-search {
-    max-width: 600px;
-    margin: 0 auto;
+
+  loading.value = true
+  try {
+    const queryParam = `?query=${encodeURIComponent(trimmed)}`
+    const response = await $fetch(`/api/vinyls${queryParam}`)
+    vinyls.value = response.vinyls || []
+  } catch (error) {
+    console.error('Erreur lors de la recherche des vinyles :', error)
+    vinyls.value = []
+  } finally {
+    loading.value = false
   }
-  
-  .search-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .loading {
-    text-align: center;
-    font-style: italic;
-  }
-  
-  .no-results {
-    text-align: center;
-    color: #999;
-  }
-  
-  .vinyl-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .vinyl-item {
-    padding: 8px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  </style>
-  
+}
+
+// debounce : la recherche ne se fait que 300ms après la frappe
+const onSearch = debounce(fetchVinyls, 300)
+</script>
