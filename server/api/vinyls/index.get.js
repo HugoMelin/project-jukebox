@@ -6,9 +6,16 @@ const prisma = new PrismaClient();
  * @swagger
  * /api/vinyls:
  *   get:
- *     summary: Récupérer tous les vinyles
+ *     summary: Récupérer tous les vinyles ou effectuer une recherche par titre ou artiste
  *     tags:
  *       - Vinyls
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Chaîne de recherche pour filtrer les vinyles par titre ou artiste
  *     responses:
  *       200:
  *         description: Liste des vinyles récupérée avec succès
@@ -78,11 +85,37 @@ const prisma = new PrismaClient();
  */
 export default defineEventHandler(async (event) => {
   try {
-    const vinyls = await prisma.vinyl.findMany({
-      orderBy: {
-        title: "asc",
-      },
-    });
+    const query = getQuery(event);
+    const search = query.query?.toString().toLowerCase() || "";
+    let vinyls;
+
+    if (!search) {
+      vinyls = await prisma.vinyl.findMany({
+        orderBy: {
+          title: "asc",
+        },
+      });
+    } else {
+      vinyls = await prisma.vinyl.findMany({
+        where: {
+          OR: [
+            {
+              title: {
+                contains: search,
+              },
+            },
+            {
+              artist: {
+                contains: search,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          title: "asc",
+        },
+      });
+    }
 
     return { count: vinyls.length, vinyls };
   } catch (error) {
