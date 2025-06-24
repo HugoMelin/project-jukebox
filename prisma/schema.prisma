@@ -10,6 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  hashed_password String
+  username?       String   @unique
+  createdAt       DateTime @default(now())
+  active          Boolean  @default(true)
+  ownedVinyl      Vinyl[]
+}
+
 model Vinyl {
   id       Int     @id @default(autoincrement())
   title    String

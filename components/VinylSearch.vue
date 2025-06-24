@@ -23,9 +23,14 @@
           :key="vinyl.id"
           class="py-3 px-2 hover:bg-gray-50 transition"
         >
-          <NuxtLink :to="`/vinyls/${vinyl.id}`">
-            <div class="font-semibold text-gray-800">{{ vinyl.title }}</div>
-            <div class="text-sm text-gray-600">{{ vinyl.artist }}</div>
+          <NuxtLink :to="`/vinyls/${vinyl.id}`" class="flex gap-3">
+            <div class="w-1/5 content-center">
+              <img :src="vinyl.coverUrl" alt="Vinyl cover" class="w-full h-auto rounded-lg shadow-lg" />
+            </div>
+            <div class="content-center">
+              <div class="font-semibold text-gray-800">{{ vinyl.title }}</div>
+              <div class="text-sm text-gray-600">{{ vinyl.artist }}</div>
+            </div>
           </NuxtLink>
         </li>
       </ul>
