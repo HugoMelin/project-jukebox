@@ -9,6 +9,7 @@
     <NuxtLink to="/vinyls/add" class="bg-black text-white rounded-lg shadow-lg px-4 py-2 hover:bg-gray-800">Ajouter un vinyl</NuxtLink>
   </header>
   <NuxtPage />
+  <AppNav />
 </template>
 
 <style>
